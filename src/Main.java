@@ -46,7 +46,7 @@ class ThreadCook extends Thread {
                 this.controller.addMakeOrder(order);
             }
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
 
         }
         System.out.println("The cook end work.");
@@ -71,7 +71,7 @@ class ThreadWaiter extends Thread {
                         order.getClient(), System.lineSeparator());
             }
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
 
         }
         System.out.println("The waiter end work.");
