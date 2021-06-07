@@ -41,7 +41,7 @@ class ThreadCook extends Thread {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 Order order = this.controller.getNextOrder();
-                System.out.printf("The cock: make order %s for %s;%s", order.getDish(),
+                System.out.printf("The cook: make order %s for %s;%s", order.getDish(),
                         order.getClient(), System.lineSeparator());
                 this.controller.addMakeOrder(order);
             }
