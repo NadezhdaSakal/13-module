@@ -13,16 +13,16 @@ class Controller {
     private final ArrayDeque<Order> orders;
     private final ArrayDeque<Order> makeOrders;
 
-    Controller(int amountClients, String[] dishes) {
+    Controller (int amountClients, String[] dishes) {
         this.amountClients = amountClients;
         this.dishes = dishes;
 
-        this.orders = new ArrayDeque<>();
-        this.makeOrders = new ArrayDeque<>();
+        orders = new ArrayDeque<>();
+        makeOrders = new ArrayDeque<>();
 
-        this.poolClients = new ArrayList<>();
-        this.cook = new ThreadCook(this);
-        this.waiter = new ThreadWaiter(this);
+        poolClients = new ArrayList<>();
+        cook = new ThreadCook(this);
+        waiter = new ThreadWaiter(this);
     }
 
     private ArrayDeque<Dish> getListOrders(String[] dishes) {
@@ -61,7 +61,7 @@ class Controller {
     private void stop() {
         this.cook.interrupt();
         this.waiter.interrupt();
-        while (this.cook.isAlive() || this.waiter.isAlive()) {
+        while (cook.isAlive() || waiter.isAlive()) {
 
         }
     }
@@ -78,20 +78,20 @@ class Controller {
 
     public Order getNextMakeOrder() throws InterruptedException {
         Order order;
-        synchronized (this.makeOrders) {
-            while (this.makeOrders.isEmpty()) {
-                this.makeOrders.wait();
+        synchronized (makeOrders) {
+            while (makeOrders.isEmpty()) {
+                makeOrders.wait();
             }
-            order = this.makeOrders.removeFirst();
+            order = makeOrders.removeFirst();
         }
         return order;
     }
 
     public Order getNextOrder() throws InterruptedException {
         Order order;
-        synchronized (this.orders) {
-            while (this.orders.isEmpty()) {
-                this.orders.wait();
+        synchronized (orders) {
+            while (orders.isEmpty()) {
+                orders.wait();
             }
             order = this.orders.removeFirst();
         }
@@ -101,9 +101,9 @@ class Controller {
     public void addOrder(Order order) {
         if (order != null) {
             synchronized (this.orders) {
-                this.orders.add(order);
+                orders.add(order);
                 System.out.println(order);
-                this.orders.notify();
+                orders.notify();
             }
         }
     }

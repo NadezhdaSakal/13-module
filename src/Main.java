@@ -3,6 +3,7 @@ public class Main {
     private static final String[] DISHES = {"Soup", "Salad", "Coffee"};
 
     public static void main(String[] args) {
+
         new Controller(AMOUNT_CLIENTS, DISHES).init();
     }
 }

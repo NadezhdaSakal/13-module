@@ -17,6 +17,6 @@ class Order {
 
     @Override
     public String toString() {
-        return String.format("%s order %s", this.client, this.dish);
+        return String.format("%s order %s", client, dish);
     }
 }
