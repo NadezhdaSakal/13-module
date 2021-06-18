@@ -2,20 +2,19 @@ class ThreadClient extends Thread {
     private final Client client;
 
     ThreadClient(Client client) {
-
         this.client = client;
     }
 
     @Override
     public void run() {
-        System.out.printf("%s : come to restaurant;%s", client, System.lineSeparator());
+        System.out.printf("%s: come to restaurant;%s", this.client, System.lineSeparator());
         try {
-            while (!client.dishesIsEmpty()) {
-                client.makeOrder();
+            while (!this.client.dishesIsEmpty()) {
+                this.client.makeOrder();
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            e.printStackTrace();
         }
-        System.out.printf("%s: exit to restaurant;%s", client, System.lineSeparator());
+        System.out.printf("%s: exit to restaurant;%s", this.client, System.lineSeparator());
     }
 }

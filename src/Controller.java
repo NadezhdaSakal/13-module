@@ -13,16 +13,16 @@ class Controller {
     private final ArrayDeque<Order> orders;
     private final ArrayDeque<Order> makeOrders;
 
-    Controller (int amountClients, String[] dishes) {
+    Controller(int amountClients, String[] dishes) {
         this.amountClients = amountClients;
         this.dishes = dishes;
 
-        orders = new ArrayDeque<>();
-        makeOrders = new ArrayDeque<>();
+        this.orders = new ArrayDeque<>();
+        this.makeOrders = new ArrayDeque<>();
 
-        poolClients = new ArrayList<>();
-        cook = new ThreadCook(this);
-        waiter = new ThreadWaiter(this);
+        this.poolClients = new ArrayList<>();
+        this.cook = new ThreadCook(this);
+        this.waiter = new ThreadWaiter(this);
     }
 
     private ArrayDeque<Dish> getListOrders(String[] dishes) {
@@ -36,7 +36,7 @@ class Controller {
     }
 
     void init() {
-        System.out.println("Start program");
+        System.out.println("Start program...");
         this.cook.start();
         this.waiter.start();
         this.startClients();
@@ -46,13 +46,12 @@ class Controller {
                 break;
             }
         }
-        System.out.println("End program");
+        System.out.println("End program...");
     }
 
     private void startClients() {
         for (int count = 0; count < this.amountClients; count++) {
-            ThreadClient client = new ThreadClient(new Client(count + 1, "Client",
-                    this, this.getListOrders(this.dishes)));
+            ThreadClient client = new ThreadClient(new Client(count + 1, "Client", this, this.getListOrders(this.dishes)));
             this.poolClients.add(client);
             client.start();
         }
@@ -61,7 +60,7 @@ class Controller {
     private void stop() {
         this.cook.interrupt();
         this.waiter.interrupt();
-        while (cook.isAlive() || waiter.isAlive()) {
+        while (this.cook.isAlive() || this.waiter.isAlive()) {
 
         }
     }
@@ -78,20 +77,20 @@ class Controller {
 
     public Order getNextMakeOrder() throws InterruptedException {
         Order order;
-        synchronized (makeOrders) {
-            while (makeOrders.isEmpty()) {
-                makeOrders.wait();
+        synchronized (this.makeOrders) {
+            while (this.makeOrders.isEmpty()) {
+                this.makeOrders.wait();
             }
-            order = makeOrders.removeFirst();
+            order = this.makeOrders.removeFirst();
         }
         return order;
     }
 
     public Order getNextOrder() throws InterruptedException {
         Order order;
-        synchronized (orders) {
-            while (orders.isEmpty()) {
-                orders.wait();
+        synchronized (this.orders) {
+            while (this.orders.isEmpty()) {
+                this.orders.wait();
             }
             order = this.orders.removeFirst();
         }
@@ -101,9 +100,9 @@ class Controller {
     public void addOrder(Order order) {
         if (order != null) {
             synchronized (this.orders) {
-                orders.add(order);
+                this.orders.add(order);
                 System.out.println(order);
-                orders.notify();
+                this.orders.notify();
             }
         }
     }
